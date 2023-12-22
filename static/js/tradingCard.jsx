@@ -1,4 +1,4 @@
-const tradingCardData = [
+const tradingCardData = [                                               
   {
     name: 'Balloonicorn',
     skill: 'video games',
@@ -60,20 +60,66 @@ function TradingCard(props) {
 }
 
 function TradingCardContainer() {
+
+  const [cards, setCards] = React.useState([]);
+
+
+  React.useEffect(() => {
+    fetch('/cards.json')
+    .then((response) => response.json())
+    .then((data) => {
+      setCards(data.cards);
+      console.log(data.cards);
+    })
+  }, [])
   const tradingCards = [];
 
-  for (const currentCard of tradingCardData) {
+  for (const currentCard of cards) {
     tradingCards.push(
       <TradingCard
-        key={currentCard.cardId}
+        key={currentCard.name}
         name={currentCard.name}
         skill={currentCard.skill}
         imgUrl={currentCard.imgUrl}
-      />,
+      />
     );
   }
 
-  return <div className="grid">{tradingCards}</div>;
+  return (
+    <div className="grid">{tradingCards}</div>
+  );
+
 }
+
+/*take this multiblock out later
+function TradingCardContainer() {
+
+  const floatCard = {
+    name: 'Float',
+    skill: 'baking pretzels',
+    imgUrl: '/static/img/float.jpg'
+  };
+
+  const [cards, setCards] = React.useState([floatCard]);
+
+  const tradingCards = [];
+
+  for (const currentCard of cards) {
+    tradingCards.push(
+      <TradingCard
+        key={currentCard.name}
+        name={currentCard.name}
+        skill={currentCard.skill}
+        imgUrl={currentCard.imgUrl}
+      />
+    );
+  }
+
+  return (
+    <div className="grid">{tradingCards}</div>
+  );
+
+}
+to here */
 
 ReactDOM.render(<TradingCardContainer />, document.getElementById('container'));
